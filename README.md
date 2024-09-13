@@ -31,7 +31,7 @@ nvm use 16.20.0
 # Exporting relative paths in Unity VCS configuration dashboard doesn't work, so do it manually here
 export FOLDER="./"
 
-git clone https://github.com/ZeroSpace-Studios/sync-repo-docs-to-notion.git
+git clone https://github.com/jonathan-payflip/sync-repo-docs-to-notion.git
 node sync-repo-docs-to-notion/dist/index.js
 ```
 
@@ -55,7 +55,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: sync repo docs to notions
-        uses: ZeroSpace-Studios/sync-repo-docs-to-notion@main
+        uses: jonathan-payflip/sync-repo-docs-to-notion@main
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_ROOT_PAGE_ID: https://www.notion.so/MyRootPage-jdskdjs8yd83dheeee
@@ -92,7 +92,7 @@ jobs:
             *.md
       - name: sync repo docs to notions
         if: steps.changed-files-specific.outputs.any_changed == 'true'
-        uses: ZeroSpace-Studios/sync-repo-docs-to-notion@main
+        uses: jonathan-payflip/sync-repo-docs-to-notion@main
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_ROOT_PAGE_ID: https://www.notion.so/MyRootPage-jdskdjs8yd83dheeee
@@ -103,6 +103,7 @@ jobs:
 ```
 
 ### Warnings
+
 - Deletion is slow, if you changed a lot of documents it's easier to cleanup Notion first, and then run the action
 
 ## Local installation and developer setup
@@ -113,8 +114,11 @@ jobs:
 - clone this project
 - navigate to cloned project
 - npm install
+
 ### VS Code
+
 - Configure your launch.json with environment variables (Be sure not to commit them to the repo!):
+
 ```json
             "program": "${workspaceFolder}\\index.js",
             "env": {
@@ -127,13 +131,15 @@ jobs:
 ```
 
 ### Local shell
+
 - To set environment variables in Windows powershell:
-    ```powershell
-    $env:FOLDER=$pwd
-    $env:NOTION_TOKEN='NOTION_SECRET'
-    $env:NOTION_ROOT_PAGE_ID='NOTION_PAGE_ID'
-    $env:RELATIVE_URLS_ROOT='null'
-    ```
+
+  ```powershell
+  $env:FOLDER=$pwd
+  $env:NOTION_TOKEN='NOTION_SECRET'
+  $env:NOTION_ROOT_PAGE_ID='NOTION_PAGE_ID'
+  $env:RELATIVE_URLS_ROOT='null'
+  ```
 
 - Or, in bash environment:
   ```bash
@@ -145,5 +151,5 @@ jobs:
 - Then run `node index.js`
 
 ### Deployment
-- To compile into `dist/index.js` for deployment, run `ncc build index.js`. This packages up the node modules so that `npm install` does not have to be run on deployed instances. Be sure to commit the updated `dist/index.js` as well.
 
+- To compile into `dist/index.js` for deployment, run `ncc build index.js`. This packages up the node modules so that `npm install` does not have to be run on deployed instances. Be sure to commit the updated `dist/index.js` as well.
