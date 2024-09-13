@@ -1,5 +1,5 @@
 {
-  "name": "sync-repo-docs-to-notion",
+  "name": "sync-all-repo-docs-to-notion",
   "version": "1.0.0",
   "description": "Sync all repository md files to notion wiki",
   "main": "index.js",
