@@ -26320,20 +26320,43 @@ const fileToNotionBlocks = (filePath) => {
   // Rejoin the remaining content after removing the title
   mdContent = lines.join("\n");
 
+  // Extract the relative path for the file from the repository's root
+  const relativePath = filePath.replace(`${process.env.FOLDER}/`, "");
+
   // Append a link to the GitHub repository for the file
-  const repoLink = `${
-    process.env.RELATIVE_URLS_ROOT
-  }/blob/master/${filePath.replace(process.env.FOLDER, "")}`;
+  const repoLink = `${process.env.RELATIVE_URLS_ROOT}/blob/master/${relativePath}`;
+  const separator = "\n\n---\n"; // This is the markdown for a horizontal rule (separator)
   const linkToFile = `\n\n[View this file in GitHub](${repoLink})`;
 
   // Append the link to the markdown content
-  mdContent += linkToFile;
+  mdContent += separator + linkToFile;
 
   let newBlocks = markdownToBlocks(mdContent);
 
   const fileHash = crypto.createHash("md5").update(mdContent).digest("hex");
-  const hashBlock = markdownToBlocks(`md5:${fileHash}`);
-  newBlocks.push(hashBlock[0]);
+  // const hashBlock = markdownToBlocks(
+  //   `\n\n*<span style="color:lightgrey;">md5:${fileHash}</span>*`
+  // );
+
+  // Add a light grey, italic MD5 hash block with a newline before it
+  const md5BlockContent = `\n\n\`\`\`\nmd5: ${fileHash}\n\`\`\``;
+  const md5Block = markdownToBlocks(md5BlockContent);
+
+  // Ensure the md5Block has the necessary structure
+  if (
+    md5Block.length > 0 &&
+    md5Block[0].type === "code" // Ensure it's a code block
+  ) {
+    // Add light grey color to the code block
+    md5Block[0].code.rich_text[0].annotations = {
+      code: true, // This makes it appear as a code block
+      color: "gray", // Add grey color
+      italic: true, // Italic for styling
+    };
+
+    // Push the MD5 block into the newBlocks array
+    newBlocks.push(md5Block[0]);
+  }
 
   // fix relative urls
   newBlocks = deepReplaceValue(
