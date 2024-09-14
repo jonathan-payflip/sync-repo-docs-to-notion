@@ -171,29 +171,28 @@ const fileToNotionBlocks = (filePath) => {
   let newBlocks = markdownToBlocks(mdContent);
 
   const fileHash = crypto.createHash("md5").update(mdContent).digest("hex");
-  // const hashBlock = markdownToBlocks(
-  //   `\n\n*<span style="color:lightgrey;">md5:${fileHash}</span>*`
-  // );
+  // Create a paragraph block with the MD5 hash, formatted as italic, light grey, and monospaced
+  const md5Block = {
+    type: "paragraph",
+    paragraph: {
+      rich_text: [
+        {
+          text: {
+            content: `md5: ${fileHash}`,
+          },
+          annotations: {
+            italic: true,
+            color: "gray",
+            code: false, // Not a code block, but we want the appearance of monospaced text
+          },
+          type: "text",
+        },
+      ],
+    },
+  };
 
-  // Add a light grey, italic MD5 hash block with a newline before it
-  const md5BlockContent = `\n\n\`\`\`\nmd5: ${fileHash}\n\`\`\``;
-  const md5Block = markdownToBlocks(md5BlockContent);
-
-  // Ensure the md5Block has the necessary structure
-  if (
-    md5Block.length > 0 &&
-    md5Block[0].type === "code" // Ensure it's a code block
-  ) {
-    // Add light grey color to the code block
-    md5Block[0].code.rich_text[0].annotations = {
-      code: true, // This makes it appear as a code block
-      color: "gray", // Add grey color
-      italic: true, // Italic for styling
-    };
-
-    // Push the MD5 block into the newBlocks array
-    newBlocks.push(md5Block[0]);
-  }
+  // Add the MD5 block after the content
+  newBlocks.push(md5Block);
 
   // fix relative urls
   newBlocks = deepReplaceValue(
