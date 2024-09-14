@@ -18159,14 +18159,6 @@ module.exports = require("path");
 
 /***/ }),
 
-/***/ 7282:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("process");
-
-/***/ }),
-
 /***/ 5477:
 /***/ ((module) => {
 
@@ -26167,7 +26159,6 @@ const crypto = __nccwpck_require__(6113);
 const { globSync } = __nccwpck_require__(5294);
 const { markdownToBlocks } = __nccwpck_require__(9989);
 const { Client } = __nccwpck_require__(1587);
-const { title } = __nccwpck_require__(7282);
 
 const REQUIRED_ENV_VARS = [
   "FOLDER",
@@ -26320,40 +26311,21 @@ const fileToNotionBlocks = (filePath) => {
   // Rejoin the remaining content after removing the title
   mdContent = lines.join("\n");
 
+  // Convert the modified markdown content into Notion blocks
+  let newBlocks = markdownToBlocks(mdContent);
+
   // Extract the relative path for the file from the repository's root
   const relativePath = filePath.replace(`${process.env.FOLDER}/`, "");
 
-  // Append a link to the GitHub repository for the file
   const repoLink = `${process.env.RELATIVE_URLS_ROOT}/blob/master/${relativePath}`;
-  const separator = "\n\n---\n"; // This is the markdown for a horizontal rule (separator)
-  const linkToFile = `\n\n[View this file in GitHub](${repoLink})`;
 
-  // Append the link to the markdown content
-  mdContent += separator + linkToFile;
-
-  let newBlocks = markdownToBlocks(mdContent);
-
-  const fileHash = crypto.createHash("md5").update(mdContent).digest("hex");
+  // Create a button-like structure with the GitHub logo and a clickable link
+  const githubButtonBlock = createGithubLinkBlock(repoLink);
   // Create a paragraph block with the MD5 hash, formatted as italic, light grey, and monospaced
-  const md5Block = {
-    type: "paragraph",
-    paragraph: {
-      rich_text: [
-        {
-          text: {
-            content: `md5: ${fileHash}`,
-          },
-          annotations: {
-            italic: true,
-            color: "gray",
-            code: false, // Not a code block, but we want the appearance of monospaced text
-          },
-          type: "text",
-        },
-      ],
-    },
-  };
+  const md5Block = createMD5Block(mdContent);
 
+  // Add the github link before the content
+  newBlocks.unshift(githubButtonBlock);
   // Add the MD5 block after the content
   newBlocks.push(md5Block);
 
@@ -26381,6 +26353,66 @@ const fileToNotionBlocks = (filePath) => {
   );
 
   return newBlocks;
+};
+
+const createMD5Block = (mdContent) => {
+  const fileHash = crypto.createHash("md5").update(mdContent).digest("hex");
+  // Create a paragraph block with the MD5 hash, formatted as italic, light grey, and monospaced
+  return {
+    type: "paragraph",
+    paragraph: {
+      rich_text: [
+        {
+          text: {
+            content: `md5: ${fileHash}`,
+          },
+          annotations: {
+            italic: true,
+            color: "gray",
+            code: false, // Not a code block, but we want the appearance of monospaced text
+          },
+          type: "text",
+        },
+      ],
+    },
+  };
+};
+
+const createGithubLinkBlock = (url) => {
+  // GitHub logo URL (assuming you have it hosted or you can find a URL of the logo online)
+  const githubLogoUrl =
+    "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png";
+
+  // Create a button-like structure with the GitHub logo and a clickable link
+  return {
+    type: "paragraph",
+    paragraph: {
+      rich_text: [
+        {
+          type: "image",
+          image: {
+            type: "external",
+            external: {
+              url: githubLogoUrl,
+            },
+          },
+        },
+        {
+          type: "text",
+          text: {
+            content: " View this file in GitHub",
+            link: {
+              url,
+            },
+          },
+          annotations: {
+            bold: true, // Make the text bold like a button
+            color: "default",
+          },
+        },
+      ],
+    },
+  };
 };
 
 const createPagesSequentially = (pageTitleToFileMap, rootPage) => {
