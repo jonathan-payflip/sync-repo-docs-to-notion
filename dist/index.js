@@ -26316,18 +26316,12 @@ const fileToNotionBlocks = (filePath) => {
 
   // Extract the relative path for the file from the repository's root
   const relativePath = filePath.replace(`${process.env.FOLDER}/`, "");
-
   const repoLink = `${process.env.RELATIVE_URLS_ROOT}/blob/master/${relativePath}`;
 
   // Create a button-like structure with the GitHub logo and a clickable link
   const githubButtonBlock = createGithubLinkBlock(repoLink);
   // Create a paragraph block with the MD5 hash, formatted as italic, light grey, and monospaced
   const md5Block = createMD5Block(mdContent);
-
-  // Add the github link before the content
-  newBlocks.unshift(githubButtonBlock);
-  // Add the MD5 block after the content
-  newBlocks.push(md5Block);
 
   // fix relative urls
   newBlocks = deepReplaceValue(
@@ -26351,6 +26345,11 @@ const fileToNotionBlocks = (filePath) => {
       }
     }
   );
+
+  // Add the github link after the content
+  newBlocks.push(githubButtonBlock);
+  // Add the MD5 block after the content
+  newBlocks.push(md5Block);
 
   return newBlocks;
 };
