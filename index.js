@@ -141,7 +141,7 @@ const titleFromFirstHeading = (filePath) => {
 };
 
 const fileToNotionBlocks = (filePath) => {
-  const mdContent = fs.readFileSync(filePath, "utf8");
+  let mdContent = fs.readFileSync(filePath, "utf8");
 
   // Split the file content by lines and remove the first heading
   const lines = mdContent.split("\n");
