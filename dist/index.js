@@ -26381,9 +26381,7 @@ const createMD5Block = (mdContent) => {
     callout: {
       icon: {
         type: "emoji",
-        emoji: {
-          character: "🔒",
-        },
+        emoji: "🤖",
       },
       rich_text: [
         {
