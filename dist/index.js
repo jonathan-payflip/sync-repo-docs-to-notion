@@ -26388,25 +26388,31 @@ const createGithubLinkBlock = (url) => {
     paragraph: {
       rich_text: [
         {
+          type: "text",
+          text: {
+            content: "View this file in GitHub",
+            link: {
+              url,
+            },
+          },
+          annotations: {
+            bold: true,
+            color: "default",
+          },
+        },
+        {
+          type: "text",
+          text: {
+            content: " ", // This is a workaround to allow the logo and the link to coexist
+          },
+        },
+        {
           type: "image",
           image: {
             type: "external",
             external: {
               url: githubLogoUrl,
             },
-          },
-        },
-        {
-          type: "text",
-          text: {
-            content: " View this file in GitHub",
-            link: {
-              url,
-            },
-          },
-          annotations: {
-            bold: true, // Make the text bold like a button
-            color: "default",
           },
         },
       ],
