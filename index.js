@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const { globSync } = require("glob");
 const { markdownToBlocks } = require("@tryfabric/martian");
 const { Client } = require("@notionhq/client");
+const path = require("path");
 
 const REQUIRED_ENV_VARS = [
   "FOLDER",
@@ -160,8 +161,9 @@ const fileToNotionBlocks = (filePath) => {
   let newBlocks = markdownToBlocks(mdContent);
 
   // Extract the relative path for the file from the repository's root
-  const relativePath = filePath.replace(`${process.env.FOLDER}/`, "");
-  const repoLink = `${process.env.RELATIVE_URLS_ROOT}/blob/master/${relativePath}`;
+  // const relativePath = filePath.replace(`${process.env.FOLDER}/`, "");
+  // const repoLink = `${process.env.RELATIVE_URLS_ROOT}/blob/master/${relativePath}`;
+  const repoLink = createRepoLink(filePath);
 
   // Create a button-like structure with the GitHub logo and a clickable link
   const githubButtonBlock = createGithubLinkBlock(repoLink);
@@ -192,19 +194,33 @@ const fileToNotionBlocks = (filePath) => {
   );
   // TO DO CHECK HERE AND REMOVE THE NEW BLOCKS TO SEE IF IT WORKS AND SEE WHICH BLOCK IS CAUSING THE ERROR
   // Add the github link after the content
-  newBlocks.push(githubButtonBlock);
+  newBlocks.unshift(githubButtonBlock);
   // Add the MD5 block after the content
   newBlocks.push(md5Block);
 
   return newBlocks;
 };
 
+const createRepoLink = (filePath) => {
+  // Define the path to your project root in the runner (e.g., /home/runner/work/payflip/payflip/)
+  const projectRoot = path.resolve(
+    process.env.GITHUB_WORKSPACE || process.env.FOLDER
+  );
+
+  // Get the relative path from the project root
+  const relativePath = path.relative(projectRoot, filePath);
+
+  // Create the GitHub repository link
+  const repoLink = `${process.env.RELATIVE_URLS_ROOT}/blob/master/${relativePath}`;
+  return repoLink;
+};
+
 const createMD5Block = (mdContent) => {
   const fileHash = crypto.createHash("md5").update(mdContent).digest("hex");
   // Create a paragraph block with the MD5 hash, formatted as italic, light grey, and monospaced
   return {
-    type: "paragraph",
-    paragraph: {
+    type: "callout",
+    callout: {
       rich_text: [
         {
           text: {
