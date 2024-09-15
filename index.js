@@ -229,8 +229,14 @@ const createGithubLinkBlock = (url) => {
 
   // Create a button-like structure with the GitHub logo and a clickable link
   return {
-    type: "paragraph",
-    paragraph: {
+    type: "callout",
+    callout: {
+      icon: {
+        type: "external",
+        external: {
+          url: githubLogoUrl,
+        },
+      },
       rich_text: [
         {
           type: "text",
@@ -245,22 +251,8 @@ const createGithubLinkBlock = (url) => {
             color: "default",
           },
         },
-        {
-          type: "text",
-          text: {
-            content: " ", // This is a workaround to allow the logo and the link to coexist
-          },
-        },
-        {
-          type: "image",
-          image: {
-            type: "external",
-            external: {
-              url: githubLogoUrl,
-            },
-          },
-        },
       ],
+      // Optionally, you can also add some more content or instructions here if needed.
     },
   };
 };
