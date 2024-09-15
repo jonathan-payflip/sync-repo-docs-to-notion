@@ -192,7 +192,7 @@ const fileToNotionBlocks = (filePath) => {
   );
   // TO DO CHECK HERE AND REMOVE THE NEW BLOCKS TO SEE IF IT WORKS AND SEE WHICH BLOCK IS CAUSING THE ERROR
   // Add the github link after the content
-  // newBlocks.push(githubButtonBlock);
+  newBlocks.push(githubButtonBlock);
   // Add the MD5 block after the content
   newBlocks.push(md5Block);
 
