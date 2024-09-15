@@ -192,6 +192,9 @@ const fileToNotionBlocks = (filePath) => {
   newBlocks.unshift(githubButtonBlock);
   newBlocks.unshift(createSpacerBlock());
   // Add the MD5 block after the content
+  newBlocks.push(createSpacerBlock());
+  newBlocks.push(createDividerBlock());
+  newBlocks.push(createSpacerBlock());
   newBlocks.push(md5Block);
 
   return newBlocks;
@@ -204,6 +207,12 @@ const createSpacerBlock = () => ({
   },
 });
 
+const createDividerBlock = () => {
+  return {
+    type: "divider",
+    divider: {},
+  };
+};
 const createRepoLink = (filePath) => {
   // Define the path to your project root in the runner (e.g., /home/runner/work/payflip/payflip/)
   const projectRoot = path.resolve(
@@ -220,25 +229,34 @@ const createRepoLink = (filePath) => {
 
 const createMD5Block = (mdContent) => {
   const fileHash = crypto.createHash("md5").update(mdContent).digest("hex");
+  const now = new Date();
+  const dateTimeString = now.toLocaleString();
   // Create a paragraph block with the MD5 hash, formatted as italic, light grey, and monospaced
   return {
-    type: "callout",
-    callout: {
-      icon: {
-        type: "emoji",
-        emoji: "🤖",
-      },
+    type: "paragraph",
+    paragraph: {
       rich_text: [
         {
+          type: "text",
           text: {
             content: `md5: ${fileHash}`,
           },
           annotations: {
             italic: true,
-            color: "gray",
-            code: false, // Not a code block, but we want the appearance of monospaced text
+            color: "gray", // Light gray text color
+            code: false, // Not a code block
           },
+        },
+        {
           type: "text",
+          text: {
+            content: `\nGenerated on ${dateTimeString}`,
+          },
+          annotations: {
+            italic: true,
+            color: "gray", // Light gray text color
+            code: false, // Not a code block
+          },
         },
       ],
     },
