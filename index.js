@@ -194,7 +194,7 @@ const fileToNotionBlocks = (filePath) => {
   // Add the github link after the content
   // newBlocks.push(githubButtonBlock);
   // Add the MD5 block after the content
-  // newBlocks.push(md5Block);
+  newBlocks.push(md5Block);
 
   return newBlocks;
 };
