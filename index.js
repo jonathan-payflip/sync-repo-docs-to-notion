@@ -230,7 +230,16 @@ const createRepoLink = (filePath) => {
 const createMD5Block = (mdContent) => {
   const fileHash = crypto.createHash("md5").update(mdContent).digest("hex");
   const now = new Date();
-  const dateTimeString = now.toLocaleString();
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZoneName: "short", // Use 'short' for abbreviated timezone (e.g., 'PST')
+  };
+  const dateTimeString = now.toLocaleString("fr-BE", options);
   // Create a paragraph block with the MD5 hash, formatted as italic, light grey, and monospaced
   return {
     type: "paragraph",
