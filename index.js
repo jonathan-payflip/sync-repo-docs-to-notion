@@ -179,8 +179,8 @@ const fileToNotionBlocks = (filePath) => {
         //        #1.-сделки-и-договоры-сделки-post
         return process.env.RELATIVE_URLS_ROOT;
         // } else if (url.match(/\.png$|\.jpg$|\.jpeg$|\.webp/)) {
-        //   DEBUG && console.log('fixing img url -> ', url)
-        //   return `${process.env.RELATIVE_URLS_ROOT}/blob/master/${url}`
+        //   DEBUG && console.log("fixing img url -> ", url);
+        //   return createRepoLink(url);
       } else {
         DEBUG && console.log("fixing relative url -> ", url);
         return `${process.env.RELATIVE_URLS_ROOT}/tree/master/${url}`;
@@ -224,6 +224,7 @@ const createMD5Block = (mdContent) => {
   return {
     type: "callout",
     callout: {
+      icon: null,
       rich_text: [
         {
           text: {
