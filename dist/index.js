@@ -26380,10 +26380,9 @@ const createMD5Block = (mdContent) => {
     type: "callout",
     callout: {
       icon: {
-        type: "emoji", // Use an empty emoji type to avoid displaying any icon
+        type: "emoji",
         emoji: {
-          // Optional: Use a placeholder or empty emoji
-          character: "\u00A0",
+          character: "🔒",
         },
       },
       rich_text: [
