@@ -249,7 +249,7 @@ const createMD5Block = (mdContent) => {
         {
           type: "text",
           text: {
-            content: `\nGenerated on ${dateTimeString}`,
+            content: `Generated on ${dateTimeString}`,
           },
           annotations: {
             italic: true,
@@ -260,7 +260,7 @@ const createMD5Block = (mdContent) => {
         {
           type: "text",
           text: {
-            content: `md5: ${fileHash}`,
+            content: `\nmd5: ${fileHash}`,
           },
           annotations: {
             italic: true,
