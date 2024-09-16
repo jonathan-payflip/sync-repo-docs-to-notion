@@ -26342,11 +26342,12 @@ const fileToNotionBlocks = (filePath) => {
       }
     }
   );
-  // TO DO CHECK HERE AND REMOVE THE NEW BLOCKS TO SEE IF IT WORKS AND SEE WHICH BLOCK IS CAUSING THE ERROR
+
   // Add the github link after the content
+  newBlocks.unshift(createSpacerBlock());
   newBlocks.unshift(githubButtonBlock);
   newBlocks.unshift(createSpacerBlock());
-  // Add the MD5 block after the content
+
   newBlocks.push(createSpacerBlock());
   newBlocks.push(createDividerBlock());
   newBlocks.push(createSpacerBlock());
@@ -26403,7 +26404,7 @@ const createMD5Block = (mdContent) => {
         {
           type: "text",
           text: {
-            content: `md5: ${fileHash}`,
+            content: `\nGenerated on ${dateTimeString}`,
           },
           annotations: {
             italic: true,
@@ -26414,7 +26415,7 @@ const createMD5Block = (mdContent) => {
         {
           type: "text",
           text: {
-            content: `\nGenerated on ${dateTimeString}`,
+            content: `md5: ${fileHash}`,
           },
           annotations: {
             italic: true,
